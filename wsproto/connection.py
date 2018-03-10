@@ -301,6 +301,10 @@ class WSConnection(object):
                     yield BytesReceived(frame.payload,
                                         frame.frame_finished,
                                         frame.message_finished)
+
+                else:
+                    raise RuntimeError("Don't understand opcode", frame.opcode)
+
         except ParseFailed as exc:
             # XX FIXME: apparently autobahn intentionally deviates from the
             # spec in that on protocol errors it just closes the connection
