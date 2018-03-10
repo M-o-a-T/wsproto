@@ -302,7 +302,7 @@ class WSConnection(object):
                                         frame.frame_finished,
                                         frame.message_finished)
 
-                else:
+                elif type(frame.opcode) != object:  # test
                     raise RuntimeError("Don't understand opcode", frame.opcode)
 
         except ParseFailed as exc:
