@@ -302,7 +302,8 @@ class WSConnection(object):
                                         frame.frame_finished,
                                         frame.message_finished)
 
-                elif type(frame.opcode) != object:  # test
+                elif type(frame.opcode) != object:  # pylint: unidiomatic-typecheck
+                                                    # this is only used for testing.
                     raise RuntimeError("Don't understand opcode", frame.opcode)
 
         except ParseFailed as exc:
