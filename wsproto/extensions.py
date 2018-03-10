@@ -150,7 +150,7 @@ class PerMessageDeflate(Extension):
     def frame_inbound_header(self, proto, opcode, rsv, payload_length):
         if rsv.rsv1 and opcode.iscontrol():
             return CloseReason.PROTOCOL_ERROR
-        elif rsv.rsv1 and opcode is Opcode.CONTINUATION:
+        elif rsv.rsv1 and opcode == Opcode.CONTINUATION:
             return CloseReason.PROTOCOL_ERROR
 
         self._inbound_is_compressible = self._compressible_opcode(opcode)
@@ -207,11 +207,11 @@ class PerMessageDeflate(Extension):
         if not self._compressible_opcode(opcode):
             return (rsv, data)
 
-        if opcode is not Opcode.CONTINUATION:
+        if opcode != Opcode.CONTINUATION:
             rsv = RsvBits(True, *rsv[1:])
 
         if self._compressor is None:
-            assert opcode is not Opcode.CONTINUATION
+            assert opcode != Opcode.CONTINUATION
             if proto.client:
                 bits = self.client_max_window_bits
             else:

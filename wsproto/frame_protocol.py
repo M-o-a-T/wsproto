@@ -190,13 +190,13 @@ class MessageDecoder(object):
         assert not frame.opcode.iscontrol()
 
         if self.opcode is None:
-            if frame.opcode is Opcode.CONTINUATION:
+            if frame.opcode == Opcode.CONTINUATION:
                 raise ParseFailed("unexpected CONTINUATION")
             self.opcode = frame.opcode
-        elif frame.opcode is not Opcode.CONTINUATION:
+        elif frame.opcode != Opcode.CONTINUATION:
             raise ParseFailed("expected CONTINUATION, got %r" % frame.opcode)
 
-        if frame.opcode is Opcode.TEXT:
+        if frame.opcode == Opcode.TEXT:
             self.validator = Utf8Validator()
             self.decoder = getincrementaldecoder("utf-8")()
 
@@ -509,7 +509,7 @@ class FrameProtocol(object):
 
         if self._outbound_opcode is None:
             self._outbound_opcode = opcode
-        elif self._outbound_opcode is not opcode:
+        elif self._outbound_opcode != opcode:
             raise TypeError('Data type mismatch inside message')
         else:
             opcode = Opcode.CONTINUATION

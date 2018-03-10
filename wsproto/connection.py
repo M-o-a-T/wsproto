@@ -278,26 +278,26 @@ class WSConnection(object):
 
         try:
             for frame in self._proto.received_frames():
-                if frame.opcode is Opcode.PING:
+                if frame.opcode == Opcode.PING:
                     assert frame.frame_finished and frame.message_finished
                     self._outgoing += self._proto.pong(frame.payload)
                     yield PingReceived(frame.payload)
 
-                elif frame.opcode is Opcode.PONG:
+                elif frame.opcode == Opcode.PONG:
                     assert frame.frame_finished and frame.message_finished
                     yield PongReceived(frame.payload)
 
-                elif frame.opcode is Opcode.CLOSE:
+                elif frame.opcode == Opcode.CLOSE:
                     code, reason = frame.payload
                     self.close(code, reason)
                     yield ConnectionClosed(code, reason)
 
-                elif frame.opcode is Opcode.TEXT:
+                elif frame.opcode == Opcode.TEXT:
                     yield TextReceived(frame.payload,
                                        frame.frame_finished,
                                        frame.message_finished)
 
-                elif frame.opcode is Opcode.BINARY:
+                elif frame.opcode == Opcode.BINARY:
                     yield BytesReceived(frame.payload,
                                         frame.frame_finished,
                                         frame.message_finished)

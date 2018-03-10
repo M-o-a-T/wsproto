@@ -104,7 +104,7 @@ class TestMessageDecoder(object):
         )
 
         frame = decoder.process_frame(frame)
-        assert frame.opcode is fp.Opcode.BINARY
+        assert frame.opcode == fp.Opcode.BINARY
         assert frame.message_finished is True
         assert frame.payload == payload
 
@@ -121,7 +121,7 @@ class TestMessageDecoder(object):
         )
 
         frame = decoder.process_frame(frame)
-        assert frame.opcode is fp.Opcode.BINARY
+        assert frame.opcode == fp.Opcode.BINARY
         assert frame.message_finished is False
         assert frame.payload == payload
 
@@ -137,7 +137,7 @@ class TestMessageDecoder(object):
         )
 
         frame = decoder.process_frame(frame)
-        assert frame.opcode is fp.Opcode.TEXT
+        assert frame.opcode == fp.Opcode.TEXT
         assert frame.message_finished is True
         assert frame.payload == text_payload
 
@@ -161,7 +161,7 @@ class TestMessageDecoder(object):
         )
 
         frame = decoder.process_frame(frame)
-        assert frame.opcode is fp.Opcode.TEXT
+        assert frame.opcode == fp.Opcode.TEXT
         assert frame.message_finished is False
         assert frame.payload == text_payload
 
@@ -185,7 +185,7 @@ class TestMessageDecoder(object):
         )
 
         frame = decoder.process_frame(frame)
-        assert frame.opcode is fp.Opcode.TEXT
+        assert frame.opcode == fp.Opcode.TEXT
         assert frame.message_finished is True
         assert frame.payload == text_payload
 
@@ -293,7 +293,7 @@ class TestMessageDecoder(object):
             message_finished=True
         )
         frame = decoder.process_frame(frame)
-        assert frame.opcode is fp.Opcode.TEXT
+        assert frame.opcode == fp.Opcode.TEXT
         assert frame.message_finished is False
         assert frame.payload == text_payload[:split]
 
@@ -304,7 +304,7 @@ class TestMessageDecoder(object):
             message_finished=True
         )
         frame = decoder.process_frame(frame)
-        assert frame.opcode is fp.Opcode.TEXT
+        assert frame.opcode == fp.Opcode.TEXT
         assert frame.message_finished is True
         assert frame.payload == text_payload[split:]
 
@@ -322,7 +322,7 @@ class TestMessageDecoder(object):
             message_finished=True
         )
         frame = decoder.process_frame(frame)
-        assert frame.opcode is fp.Opcode.TEXT
+        assert frame.opcode == fp.Opcode.TEXT
         assert frame.message_finished is False
         assert frame.payload == text_payload[:(split // 3)]
 
@@ -333,7 +333,7 @@ class TestMessageDecoder(object):
             message_finished=True
         )
         frame = decoder.process_frame(frame)
-        assert frame.opcode is fp.Opcode.TEXT
+        assert frame.opcode == fp.Opcode.TEXT
         assert frame.message_finished is True
         assert frame.payload == text_payload[(split // 3):]
 
@@ -436,7 +436,7 @@ class TestFrameDecoder(object):
         decoder.receive_bytes(frame_bytes[split:])
         frame = decoder.process_buffer()
         assert frame is not None
-        assert frame.opcode is fp.Opcode.CONTINUATION
+        assert frame.opcode == fp.Opcode.CONTINUATION
         assert frame.payload == payload[-len(frame.payload):]
         assert frame.frame_finished is True
         assert frame.message_finished is True
@@ -698,7 +698,7 @@ class TestFrameDecoder(object):
         decoder.receive_bytes(frame_bytes[-chunk_size:])
         frame = decoder.process_buffer()
         assert frame is not None
-        assert frame.opcode is fp.Opcode.PING
+        assert frame.opcode == fp.Opcode.PING
         assert frame.frame_finished is True
         assert frame.message_finished is True
         assert frame.payload == payload
@@ -745,7 +745,7 @@ class TestFrameDecoderExtensions(object):
 
         def frame_inbound_header(self, proto, opcode, rsv, payload_length):
             self._inbound_header_called = True
-            if opcode is fp.Opcode.PONG:
+            if opcode == fp.Opcode.PONG:
                 return fp.CloseReason.MANDATORY_EXT
             self._inbound_rsv_bit_set = rsv.rsv3
             return fp.RsvBits(False, False, True)
@@ -768,7 +768,7 @@ class TestFrameDecoderExtensions(object):
                 return u'™'.encode('utf-8')
 
         def frame_outbound(self, proto, opcode, rsv, data, fin):
-            if opcode is fp.Opcode.TEXT:
+            if opcode == fp.Opcode.TEXT:
                 rsv = fp.RsvBits(rsv.rsv1, rsv.rsv2, True)
                 self._outbound_rsv_bit_set = True
             if fin and self._outbound_rsv_bit_set:
