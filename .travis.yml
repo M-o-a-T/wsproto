@@ -17,8 +17,6 @@ env:
 matrix:
   include:
     # Main tests on supported Python versions.
-    - python: 2.7
-      env: TOXENV=py27
     - python: 3.5
       env: TOXENV=py35
     - python: 3.6
@@ -29,14 +27,10 @@ matrix:
       env: TOXENV=py35 EXTRA_DEPS=wsaccel
     - python: 3.6
       env: TOXENV=py36 EXTRA_DEPS=wsaccel
-    - python: 2.7
-      env: TOXENV=autobahn EXTRA_DEPS=wsaccel SIDE=client
     - python: 3.5
       env: TOXENV=autobahn EXTRA_DEPS=wsaccel SIDE=client
     - python: 3.6
       env: TOXENV=autobahn EXTRA_DEPS=wsaccel SIDE=client
-    - python: 2.7
-      env: TOXENV=autobahn EXTRA_DEPS=wsaccel SIDE=server
     - python: 3.5
       env: TOXENV=autobahn EXTRA_DEPS=wsaccel SIDE=server
     - python: 3.6
